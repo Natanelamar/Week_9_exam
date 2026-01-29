@@ -12,5 +12,10 @@ class Sql_connector:
             )
         self.cursor = self.connection.cursor()
 
+    def get_info(self, qury):
+        self.cursor.execute(qury) 
+        info = self.cursor.fetchall()
+        self.cursor.close()
+        return info
    
         
