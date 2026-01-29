@@ -60,7 +60,12 @@ def employees_office_phone():
 
 @app.get("/q6/customers-shipping-dates")
 def customers_shipping_dates():
-    pass
+    try:
+        result = dal.get_customers_with_shipping_dates()
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
+    return result
+
 
 
 @app.get("/q7/customer-quantity-per-order")

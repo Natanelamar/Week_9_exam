@@ -69,7 +69,15 @@ def get_employees_with_office_phone():
 
 def get_customers_with_shipping_dates():
     """Return customers with their order shipping dates."""
-    pass
+    query = '''SELECT c.customerName, o.orderDate
+    FROM customers c LEFT OUTER JOIN orders o
+    ON c.customerNumber=o.customerNumber
+    '''
+    cnx = get_db_connection()
+    with cnx.cursor() as cursor:
+        cursor.execute(query)
+        clean_result = [dict(zip(cursor.column_names, row)) for row in cursor.fetchall()]
+    return clean_result
 
 
 def get_customer_quantity_per_order():
