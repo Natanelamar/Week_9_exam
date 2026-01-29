@@ -33,7 +33,11 @@ def orders_null_comments():
 
 @app.get("/q3/customers-first-5")
 def customers_first_5():
-    pass
+    try:
+        result = dal.get_first_5_customers()
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
+    return result
 
 
 @app.get("/q4/payments-total-average")

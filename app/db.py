@@ -12,9 +12,9 @@ def get_db_connection():
     """
     try:
         connection = mysql.connector.connect(
-            host='mysql',
+            host='localhost',
+            port=3306, #remove
             user='root',
-            password='rootpassword',
             database='classicmodels'
         )
         return connection
