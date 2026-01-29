@@ -1,33 +1,98 @@
 from typing import List, Dict, Any
+from db import get_db_connection
+
+
+def run_select_meny_query(query: str):
+    cnx = get_db_connection()
+    with cnx.cursor() as cursor:
+        cursor.execute(query)
+        clean_result = [dict(zip(cursor.column_names, row)) for row in cursor.fetchall()]
+    return clean_result
+
+
+def run_select_single_query(query: str):
+    cnx = get_db_connection()
+    with cnx.cursor() as cursor:
+        cursor.execute(query)
+        clean_result = dict(zip(cursor.column_names, cursor.fetchone()))
+    return clean_result
+
 
 def get_customers_by_credit_limit_range():
     """Return customers with credit limits outside the normal range."""
-    pass
+    query = '''SELECT c.customerName, c.creditLimit
+    FROM customers c
+    WHERE c.creditLimit < 10000 OR c.creditLimit > 100000'''
+    return run_select_meny_query(query)
+
 
 def get_orders_with_null_comments():
     """Return orders that have null comments."""
-    pass
+    query = '''SELECT o.orderNumber, o.comments
+    FROM orders o
+    WHERE o.comments IS NULL
+    ORDER BY o.orderDate
+    '''
+    return run_select_meny_query(query)
+
 
 def get_first_5_customers():
     """Return the first 5 customers."""
-    pass
+    query = '''SELECT c.customerName, c.contactLastName, c.contactFirstName
+        FROM customers c
+        ORDER BY c.contactLastName
+        LIMIT 5
+        '''
+    return run_select_meny_query(query)
+
 
 def get_payments_total_and_average():
     """Return total and average payment amounts."""
-    pass
+    query = '''SELECT SUM(p.amount) AS total_amount, AVG(p.amount) AS avg_amount, \
+    MIN(p.amount) AS min_amount, MAX(p.amount) AS max_amount
+    FROM payments p
+    '''
+    return run_select_single_query(query)
+
 
 def get_employees_with_office_phone():
     """Return employees with their office phone numbers."""
-    pass
+    query = '''SELECT e.firstName, e.lastName, o.phone AS office_phone
+    FROM employees e INNER JOIN offices o
+    ON e.officeCode=o.officeCode'''
+    return run_select_meny_query(query)
+
 
 def get_customers_with_shipping_dates():
     """Return customers with their order shipping dates."""
-    pass
+    query = '''SELECT c.customerName, o.orderDate
+    FROM customers c LEFT OUTER JOIN orders o
+    ON c.customerNumber=o.customerNumber
+    '''
+    return run_select_meny_query(query)
+
 
 def get_customer_quantity_per_order():
     """Return customer name and quantity for each order."""
-    pass
+    query = '''SELECT c.customerName, od.quantityOrdered
+    FROM customers c INNER JOIN orders o
+    ON c.customerNumber=o.customerNumber
+    INNER JOIN orderdetails od
+    ON o.orderNumber=od.orderNumber
+    ORDER BY c.customerName
+    '''
+    return run_select_meny_query(query)
 
-def get_customers_payments_by_lastname_pattern(pattern: str = "son"):
+
+def get_customers_payments_by_lastname_pattern():
     """Return customers and payments for last names matching pattern."""
-    pass
+    query = '''SELECT c.customerName, CONCAT(e.firstName, ' ',e.lastName) AS salesRepName, SUM(p.amount) AS total_amount
+        FROM customers c INNER JOIN employees e
+        ON c.salesRepEmployeeNumber=e.employeeNumber
+        INNER JOIN payments p
+        ON p.customerNumber=c.customerNumber
+        WHERE c.contactFirstName LIKE '%ly%' OR c.contactFirstName LIKE '%Mu%'
+        GROUP BY c.customerNumber, c.customerName, e.lastName, e.firstName
+        ORDER BY total_amount DESC
+        '''
+    return run_select_meny_query(query)
