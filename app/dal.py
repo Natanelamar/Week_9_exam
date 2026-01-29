@@ -17,6 +17,7 @@ def get_customers_by_credit_limit_range():
     return q
 
 
+
 def get_orders_with_null_comments():
     conn = get_db_connection()
     cursor = conn.cursor()
