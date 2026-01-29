@@ -24,7 +24,11 @@ def customers_credit_limit_outliers():
 
 @app.get("/q2/orders-null-comments")
 def orders_null_comments():
-    pass
+    try:
+        result = dal.get_orders_with_null_comments()
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
+    return result
 
 
 @app.get("/q3/customers-first-5")
