@@ -67,10 +67,13 @@ def customers_shipping_dates():
     return result
 
 
-
 @app.get("/q7/customer-quantity-per-order")
 def customer_quantity_per_order():
-    pass
+    try:
+        result = dal.get_customer_quantity_per_order()
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
+    return result
 
 
 @app.get("/q8/customers-payments-by-lastname-pattern")
