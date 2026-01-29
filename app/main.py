@@ -1,12 +1,11 @@
 from fastapi import FastAPI, HTTPException
 from db_init import init_database
-import uvicorn
 import dal
 
 app = FastAPI()
 
+init_database()
 
-# init_database()
 
 @app.get("/health")
 def health_check():
@@ -83,7 +82,3 @@ def customers_payments_by_lastname_pattern():
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
     return result
-
-
-if __name__ == "__main__":
-    uvicorn.run(app)
