@@ -65,7 +65,7 @@ def init_database():
             
             print("Database initialized successfully.")
             print("Server is ready.")
-            return
+            return 
             
         except Error as e:
             if attempt < max_retries - 1:
