@@ -57,7 +57,14 @@ def get_payments_total_and_average():
 
 def get_employees_with_office_phone():
     """Return employees with their office phone numbers."""
-    pass
+    query = '''SELECT e.firstName, e.lastName, o.phone AS office_phone
+    FROM employees e INNER JOIN offices o
+    ON e.officeCode=o.officeCode'''
+    cnx = get_db_connection()
+    with cnx.cursor() as cursor:
+        cursor.execute(query)
+        clean_result = [dict(zip(cursor.column_names, row)) for row in cursor.fetchall()]
+    return clean_result
 
 
 def get_customers_with_shipping_dates():

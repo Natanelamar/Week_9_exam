@@ -51,7 +51,11 @@ def payments_total_average():
 
 @app.get("/q5/employees-office-phone")
 def employees_office_phone():
-    pass
+    try:
+        result = dal.get_employees_with_office_phone()
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
+    return result
 
 
 @app.get("/q6/customers-shipping-dates")
