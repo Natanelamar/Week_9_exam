@@ -18,6 +18,7 @@ def get_orders_with_null_comments():
     """Return orders that have null comments."""
     query = '''SELECT o.orderNumber, o.comments
     FROM orders o
+    WHERE o.comments IS NULL
     ORDER BY o.orderDate
     '''
     cnx = get_db_connection()
@@ -29,12 +30,29 @@ def get_orders_with_null_comments():
 
 def get_first_5_customers():
     """Return the first 5 customers."""
-    pass
+    query = '''SELECT c.customerName, c.contactLastName, c.contactFirstName
+        FROM customers c
+        ORDER BY c.contactLastName
+        LIMIT 5
+        '''
+    cnx = get_db_connection()
+    with cnx.cursor() as cursor:
+        cursor.execute(query)
+        clean_result = [dict(zip(cursor.column_names, row)) for row in cursor.fetchall()]
+    return clean_result
 
 
 def get_payments_total_and_average():
     """Return total and average payment amounts."""
-    pass
+    query = '''SELECT SUM(p.amount) AS total_amount, AVG(p.amount) AS avg_amount, \
+    MIN(p.amount) AS min_amount, MAX(p.amount) AS max_amount
+    FROM payments p
+    '''
+    cnx = get_db_connection()
+    with cnx.cursor() as cursor:
+        cursor.execute(query)
+        clean_result = dict(zip(cursor.column_names, cursor.fetchone()))
+    return clean_result
 
 
 def get_employees_with_office_phone():

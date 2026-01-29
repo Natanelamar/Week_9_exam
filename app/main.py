@@ -42,7 +42,11 @@ def customers_first_5():
 
 @app.get("/q4/payments-total-average")
 def payments_total_average():
-    pass
+    try:
+        result = dal.get_payments_total_and_average()
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
+    return result
 
 
 @app.get("/q5/employees-office-phone")
