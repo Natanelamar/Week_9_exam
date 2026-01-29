@@ -16,15 +16,16 @@ def get_orders_with_null_comments():
 
 def get_first_5_customers():
     """Return the first 5 customers."""
-    # SELECT c.customerName, c.contactLastName, c.contactFirstName, 
-    # FROM customers c 
-    # ORDER BY c.
-    query = ''''''
+    query = '''SELECT c.customerName, c.contactLastName, c.contactFirstName
+                FROM customers c 
+                ORDER BY c.contactLastName 
+                LIMIT 5'''
     return query
 
 def get_payments_total_and_average():
     """Return total and average payment amounts."""
-    query = ''''''
+    query = '''SELECT SUM(p.amount), AVG(p.amount), MIN(p.amount), MAX(p.amount)
+                FROM payments p'''
     return query
 
 def get_employees_with_office_phone():
@@ -36,19 +37,28 @@ def get_employees_with_office_phone():
 
 def get_customers_with_shipping_dates():
     """Return customers with their order shipping dates."""
-    query = ''''''
+    query = '''SELECT c.customerName, o.shippedDate
+                FROM customers c JOIN orders o 
+                ON c.customerNumber = o.customerNumber'''
     return query
 
 def get_customer_quantity_per_order():
     """Return customer name and quantity for each order."""
-    query = ''''''
+    query = '''SELECT c.customerName, SUM(od.quantityOrdered)
+                FROM customers c JOIN orders o 
+                ON c.customerNumber = o.customerNumber JOIN orderdetails od 
+                ON o.orderNumber = od.orderNumber 
+                GROUP BY o.orderNumber, c.customerName
+                ORDER BY c.customerName'''
     return query
 
 def get_customers_payments_by_lastname_pattern(pattern: str = "son"):
     """Return customers and payments for last names matching pattern."""
-    query = '''SELECT c.customerName, CONCAT(c.contactFirstName, ' ', c.contactLastName) contactName, SUM(p.amount)
-                FROM customers c LEFT JOIN payments p 
-                ON c.customerNumber = p.customerNumber
+    query = '''SELECT c.customerName, CONCAT(e.firstName, e.lastName), SUM(p.amount) 
+                FROM customers c JOIN employees e 
+                ON c.salesRepEmployeeNumber = e.employeeNumber JOIN payments p
+                ON c.customerNumber = p.customerNumber 
+                WHERE c.contactFirstName LIKE '%Mu%' OR c.contactFirstName LIKE '%ly%' 
                 GROUP BY c.customerName
-                WHERE c.contactFirstName LIKE '%Mu%' OR c.contactFirstName LIKE '%ly%'''
+                ORDER BY SUM(p.amount) DESC'''
     return query
