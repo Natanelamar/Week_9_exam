@@ -27,6 +27,7 @@ def init_database():
             cursor = connection.cursor()
             
             # Create database if it doesn't exist
+            cursor.execute("SET GLOBAL sql_mode=(SELECT REPLACE(@@sql_mode,'ONLY_FULL_GROUP_BY',''));")
             cursor.execute("CREATE DATABASE IF NOT EXISTS classicmodels")
             cursor.execute("USE classicmodels")
             

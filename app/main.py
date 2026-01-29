@@ -23,7 +23,7 @@ def customers_credit_limit_outliers():
 @app.get("/q2/orders-null-comments")
 def orders_null_comments():
     connection = sql_conetion.Sql_connector()
-    connection.cursor.execute(dal.get_orders_with_null_comments)
+    connection.cursor.execute(dal.get_orders_with_null_comments())
     info = connection.cursor.fetchall()
     connection.cursor.close()
     return {'data': info}
@@ -39,7 +39,7 @@ def customers_first_5():
 @app.get("/q4/payments-total-average")
 def payments_total_average():
     connection = sql_conetion.Sql_connector()
-    connection.cursor.execute(dal.get_payments_total_and_average)
+    connection.cursor.execute(dal.get_payments_total_and_average())
     info = connection.cursor.fetchall()
     connection.cursor.close()
     return {'data': info}
