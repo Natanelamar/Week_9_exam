@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: service-deployment
-        image: taktuk/test_week15:v0.6
+        image: taktuk/test_week15:v0.8
         ports:
         - containerPort: 8000
         env:
