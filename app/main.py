@@ -77,8 +77,12 @@ def customer_quantity_per_order():
 
 
 @app.get("/q8/customers-payments-by-lastname-pattern")
-def customers_payments_by_lastname_pattern(pattern: str = "son"):
-    pass
+def customers_payments_by_lastname_pattern():
+    try:
+        result = dal.get_customers_payments_by_lastname_pattern()
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
+    return result
 
 
 if __name__ == "__main__":

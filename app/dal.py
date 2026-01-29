@@ -84,6 +84,15 @@ def get_customer_quantity_per_order():
     return run_select_meny_query(query)
 
 
-def get_customers_payments_by_lastname_pattern(pattern: str = "son"):
+def get_customers_payments_by_lastname_pattern():
     """Return customers and payments for last names matching pattern."""
-    pass
+    query = '''SELECT c.customerName, CONCAT(e.firstName, ' ',e.lastName) AS salesRepName, SUM(p.amount) AS total_amount
+        FROM customers c INNER JOIN employees e
+        ON c.salesRepEmployeeNumber=e.employeeNumber
+        INNER JOIN payments p
+        ON p.customerNumber=c.customerNumber
+        WHERE c.contactFirstName LIKE '%ly%' OR c.contactFirstName LIKE '%Mu%'
+        GROUP BY c.customerNumber, c.customerName, e.lastName, e.firstName
+        ORDER BY total_amount DESC
+        '''
+    return run_select_meny_query(query)
