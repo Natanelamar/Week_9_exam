@@ -11,4 +11,6 @@ class Sql_connector:
                 use_pure=True
             )
         self.cursor = self.connection.cursor()
+
+   
         
