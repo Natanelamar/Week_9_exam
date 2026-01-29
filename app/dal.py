@@ -11,7 +11,8 @@ def get_orders_with_null_comments():
     """Return orders that have null comments."""
     query = '''SELECT o.orderNumber, o.comments
                 FROM orders o 
-                WHERE o.comments IS NULL'''
+                WHERE o.comments IS NULL
+                ORDER BY o.orderDate'''
     return query
 
 def get_first_5_customers():
